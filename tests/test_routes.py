@@ -134,3 +134,22 @@ class TestAccountService(TestCase):
         
         data = response.get_json()
         self.assertEqual(len(data), 10)
+
+    def test_read_accounts(self):
+        """Read an Account"""
+        account = self._create_accounts(1)[0]
+        response = self.client.get(
+            f"{BASE_URL}/{account.id}",
+            content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data = response.get_json()
+        self.assertEqual(data["name"], account.name)
+
+    def test_read_accounts_does_not_exist(self):
+        """Accessing nonexistent Account"""
+        response = self.client.get(
+            f"{BASE_URL}/99",
+            content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
