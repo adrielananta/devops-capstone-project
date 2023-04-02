@@ -131,10 +131,10 @@ class TestAccountService(TestCase):
     def test_list_all_accounts(self):
         """Get a list of Accounts"""
         self._create_accounts(10)
-        
+
         response = self.client.get(BASE_URL)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        
+
         data = response.get_json()
         self.assertEqual(len(data), 10)
 
@@ -173,7 +173,7 @@ class TestAccountService(TestCase):
     def test_update_nonexistent_account(self):
         """Update nonexistent Account"""
         some_account = {
-            "name":"Some Name"
+            "name": "Some Name"
         }
         response = self.client.put(
             f"{BASE_URL}/99",
