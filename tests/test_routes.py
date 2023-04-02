@@ -153,3 +153,27 @@ class TestAccountService(TestCase):
             content_type="application/json"
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_update_account(self):
+        """Update existing Account information"""
+        account = AccountFactory()
+        response = self.client.post(BASE_URL, json=account.serialize())
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        new_account = response.get_json()
+        new_account["name"] = "New Name"
+        response = self.client.put(f"{BASE_URL}/{new_account['id']}", json=new_account)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        updated_account = response.get_json()
+        self.assertEqual(updated_account["name"], "New Name")
+
+    def test_update_nonexistent_account(self):
+        """Update nonexistent Account"""
+        some_account = {
+            "name":"Some Name"
+        }
+        response = self.client.put(
+            f"{BASE_URL}/99",
+            json=some_account
+        )
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
