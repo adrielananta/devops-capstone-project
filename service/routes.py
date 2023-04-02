@@ -127,6 +127,20 @@ def update_accounts(account_id):
 ######################################################################
 
 # ... place you code here to DELETE an account ...
+@app.route("/accounts/<int:account_id>", methods=["DELETE"])
+def delete_accounts(account_id):
+    """
+    Delete an Account based on account_id
+    """
+    app.logger.info(
+        f"Deleting Account with id {account_id}"
+    )
+
+    account = Account.find(account_id)
+    if account:
+        account.delete()
+    
+    return "", status.HTTP_204_NO_CONTENT
 
 
 ######################################################################
